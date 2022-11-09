@@ -1,8 +1,6 @@
 package com.ksa.telegram.orangecomplexbot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +9,9 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity(name="users")
-@Data
+@Getter
+@Setter
+
 public class User {
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +20,10 @@ public class User {
     private String lastName;
     private String userName;
     private Timestamp dateReg;
-    private String role;
+    private String rolies;
 
+    public boolean checkRole(String role){
+        String rolies_ = "," + rolies + "," ;
+        return rolies_.contains("," + role + ",");
+    }
 }

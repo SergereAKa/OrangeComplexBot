@@ -1,8 +1,10 @@
 package com.ksa.telegram.orangecomplexbot.service;
 
 import com.ksa.telegram.orangecomplexbot.component.BotMessenger;
+import com.ksa.telegram.orangecomplexbot.component.DictionaryBotMessenger;
 import com.ksa.telegram.orangecomplexbot.component.StartBotMessenger;
 import com.ksa.telegram.orangecomplexbot.config.BotConfig;
+import com.ksa.telegram.orangecomplexbot.model.DictionaryRepository;
 import com.ksa.telegram.orangecomplexbot.model.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,10 +22,11 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig config ;
     private final List<BotMessenger> messengers = new ArrayList<>();
-    public TelegramBot(BotConfig config, UserRepository userRepository){
+    public TelegramBot(BotConfig config, UserRepository userRepository, DictionaryRepository dictionaryRepository){
         this.config = config;
 
         messengers.add(new StartBotMessenger(userRepository));
+        messengers.add(new DictionaryBotMessenger(userRepository, dictionaryRepository));
 
 
     }
@@ -55,9 +58,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             if(m.isAllow()){
                 sendMessage(m.execute());
                 m.saveUser();
-            }
-            if(m.isExclusive()){
-                return;
+                if(m.isExclusive()){
+                    return;
+                }
             }
         });
 

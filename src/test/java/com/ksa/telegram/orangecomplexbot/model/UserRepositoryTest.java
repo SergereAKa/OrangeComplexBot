@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -23,7 +22,7 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    User savedUser ;
+    private User savedUser ;
 
     @BeforeEach
     void init(){
@@ -52,7 +51,7 @@ public class UserRepositoryTest {
     void testFindUser(){
         long id = savedUser.getId();
 
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         assertEquals(id, user.getId());
         assertEquals(USER_NAME, user.getUserName());
         assertEquals(LAST_NAME, user.getLastName());

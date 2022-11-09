@@ -44,7 +44,7 @@ class TelegramBotTest {
         config = Mockito.mock(BotConfig.class);
         when(config.getBotToken()).thenReturn(TOKEN);
         when(config.getBotUserName()).thenReturn(USERNAME);
-        bot = new TelegramBot(config, userRepository);
+        bot = new TelegramBot(config, userRepository, null);
 
         update = Mockito.mock(Update.class);
         chat= Mockito.mock(Chat.class);
@@ -81,7 +81,7 @@ class TelegramBotTest {
         Optional userOptinal = userRepository.findById(update.getMessage().getChatId());
 
         assertFalse(userOptinal.isEmpty());
-        User user = (User)userOptinal.get();
+        User user = (User)userOptinal.orElse(null);
 
         assertEquals(UserRepositoryTest.FIRST_NAME, user.getFirstName());
         assertEquals(UserRepositoryTest.LAST_NAME, user.getLastName());
