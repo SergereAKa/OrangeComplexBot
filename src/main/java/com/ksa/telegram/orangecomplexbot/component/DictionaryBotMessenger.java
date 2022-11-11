@@ -7,12 +7,16 @@ import com.ksa.telegram.orangecomplexbot.model.Dictionary;
 import com.ksa.telegram.orangecomplexbot.model.DictionaryRepository;
 import com.ksa.telegram.orangecomplexbot.model.User;
 import com.ksa.telegram.orangecomplexbot.model.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class DictionaryBotMessenger extends BotMessenger{
+@Component
+
+public class DictionaryBotMessenger extends BotMessenger implements IBotMessenger{
     private static final List<String> COMMANDS = Arrays.asList("/upddict", "/deldict");
     private static final String DELIM = "&";
     private static final String ROLE = "ADMIN_DICT";
@@ -33,12 +37,12 @@ public class DictionaryBotMessenger extends BotMessenger{
      * @return
      */
     public String getCommand(){
-        String command = update.getMessage().getText().split(DELIM)[0];
+        String command = this.getUpdate().getMessage().getText().split(DELIM)[0];
 
 
 
         if(command.isEmpty()){
-            throw new OrangeComplexException("The command was not found in the message(%s)", update.getMessage().getText());
+            throw new OrangeComplexException("The command was not found in the message(%s)", this.getUpdate().getMessage().getText());
         }
 
 //        if(!command.equals(COMMAND)) {
@@ -54,10 +58,10 @@ public class DictionaryBotMessenger extends BotMessenger{
      */
     public String getPrametersMessage() {
         try{
-            final String message = update.getMessage().getText();
+            final String message = this.getUpdate().getMessage().getText();
             return  message.split(DELIM)[1];
         } catch(ArrayIndexOutOfBoundsException e){
-            throw new OrangeComplexException("The message for the parameters was not found in the message \"%s\"", update.getMessage().getText());
+            throw new OrangeComplexException("The message for the parameters was not found in the message \"%s\"", this.getUpdate().getMessage().getText());
         }
     }
 
@@ -97,8 +101,8 @@ public class DictionaryBotMessenger extends BotMessenger{
      */
     @Override
     public boolean isAdmin() {
-        final long chatId = update.getMessage().getChatId();
-        final User user =  userRepository.findById(chatId).orElseThrow(()-> new RuntimeException("User with id="+chatId + " not found."));
+        final long chatId = this.getUpdate().getMessage().getChatId();
+        final User user =  this.getUserRepository().findById(chatId).orElseThrow(()-> new RuntimeException("User with id="+chatId + " not found."));
         final String rolies = "," + user.getRolies() + ",";
         return rolies.contains(","+ROLE + ",");
     }
@@ -121,7 +125,7 @@ public class DictionaryBotMessenger extends BotMessenger{
     @Override
     public SendMessage execute() {
 
-        final long chatId =  update.getMessage().getChatId();
+        final long chatId =  this.getUpdate().getMessage().getChatId();
 
         if(!isAdmin()){
             return this.prepareSendMessage(chatId, "This operation is not supported");

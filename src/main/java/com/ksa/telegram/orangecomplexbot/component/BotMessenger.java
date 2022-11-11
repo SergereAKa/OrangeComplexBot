@@ -3,6 +3,7 @@ package com.ksa.telegram.orangecomplexbot.component;
 import com.ksa.telegram.orangecomplexbot.model.User;
 import com.ksa.telegram.orangecomplexbot.model.UserRepository;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,36 +19,23 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Slf4j
-public abstract class BotMessenger {
+@RequiredArgsConstructor
+public  class BotMessenger implements IBotMessenger{
 
-    protected   Update update;
-    protected   Message message;
-    protected   UserRepository userRepository;
-
-    public BotMessenger(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
-
-    public abstract boolean isAllow();
-    public abstract boolean isExclusive();
-    public abstract SendMessage execute();
-    public abstract boolean isAdmin();
+    private   Update update;
+    private   final UserRepository userRepository;
 
     public SendMessage prepareSendMessage(long chatId, String messageText){
         return prepareSendMessage(chatId, messageText, null);
     }
 
     public SendMessage prepareSendMessage(long chatId, String messageText, ReplyKeyboardMarkup keyboardMarkup){
-        final SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(messageText);
-        message.setReplyMarkup(keyboardMarkup);
+        final SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(messageText);
+        sendMessage.setReplyMarkup(keyboardMarkup);
 
-        return message;
-    }
-
-    public Message getMessage(){
-        return update.getMessage();
+        return sendMessage;
     }
 
     public void saveUser(){
@@ -64,4 +52,23 @@ public abstract class BotMessenger {
 
     }
 
+    @Override
+    public boolean isAllow() {
+        return false;
+    }
+
+    @Override
+    public boolean isExclusive() {
+        return false;
+    }
+
+    @Override
+    public SendMessage execute() {
+        return null;
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return false;
+    }
 }

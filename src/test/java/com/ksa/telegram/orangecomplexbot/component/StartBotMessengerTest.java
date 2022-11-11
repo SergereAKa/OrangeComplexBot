@@ -86,8 +86,8 @@ class StartBotMessengerTest {
 
     @Test
     void shouldExecuteReturnCorrectMessage() {
-        SendMessage message = messenger.execute();
-        assertEquals(MSGFIRSTNAME, message.getText());
+        SendMessage sendMessage = messenger.execute();
+        assertEquals(MSGFIRSTNAME, sendMessage.getText());
     }
 
     @Test
@@ -139,9 +139,9 @@ class StartBotMessengerTest {
 
     @Test
     void shouldSavedUser(){
-        Message message = messenger.getMessage();
+        Message message = messenger.getUpdate().getMessage();
 
-        Long chatId = messenger.getMessage().getChatId();
+        Long chatId = messenger.getUpdate().getMessage().getChatId();
         messenger.saveUser();
         User user = userRepository.findById(chatId).get();
 
@@ -154,12 +154,17 @@ class StartBotMessengerTest {
 
     @Test
     void shouldMessageEqual(){
-        assertEquals(CHATID, messenger.getMessage().getChatId());
+        assertEquals(CHATID, messenger.getUpdate()
+                                      .getMessage()
+                                      .getChatId());
     }
 
     @Test
     void shoulChatEqual(){
-        assertEquals(CHATID, messenger.getMessage().getChat().getId());
+        assertEquals(CHATID, messenger.getUpdate()
+                                    .getMessage()
+                                    .getChat()
+                                    .getId());
     }
 
     @Test

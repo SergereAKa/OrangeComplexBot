@@ -3,6 +3,7 @@ package com.ksa.telegram.orangecomplexbot.service;
 import com.ksa.telegram.orangecomplexbot.component.BotMessenger;
 import com.ksa.telegram.orangecomplexbot.component.StartBotMessenger;
 import com.ksa.telegram.orangecomplexbot.config.BotConfig;
+import com.ksa.telegram.orangecomplexbot.model.DictionaryRepository;
 import com.ksa.telegram.orangecomplexbot.model.User;
 import com.ksa.telegram.orangecomplexbot.model.UserRepository;
 import com.ksa.telegram.orangecomplexbot.model.UserRepositoryTest;
@@ -31,6 +32,8 @@ class TelegramBotTest {
     private TelegramBot bot;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DictionaryRepository dictionaryRepository;
     //@Mock
     private  BotConfig config;
 
@@ -44,7 +47,7 @@ class TelegramBotTest {
         config = Mockito.mock(BotConfig.class);
         when(config.getBotToken()).thenReturn(TOKEN);
         when(config.getBotUserName()).thenReturn(USERNAME);
-        bot = new TelegramBot(config, userRepository, null);
+        bot = new TelegramBot(config, userRepository, dictionaryRepository);
 
         update = Mockito.mock(Update.class);
         chat= Mockito.mock(Chat.class);

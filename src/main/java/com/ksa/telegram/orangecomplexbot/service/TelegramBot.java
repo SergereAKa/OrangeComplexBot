@@ -3,6 +3,7 @@ package com.ksa.telegram.orangecomplexbot.service;
 import com.ksa.telegram.orangecomplexbot.component.BotMessenger;
 import com.ksa.telegram.orangecomplexbot.component.DictionaryBotMessenger;
 import com.ksa.telegram.orangecomplexbot.component.StartBotMessenger;
+import com.ksa.telegram.orangecomplexbot.component.TextBotMessenger;
 import com.ksa.telegram.orangecomplexbot.config.BotConfig;
 import com.ksa.telegram.orangecomplexbot.model.DictionaryRepository;
 import com.ksa.telegram.orangecomplexbot.model.UserRepository;
@@ -27,6 +28,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         messengers.add(new StartBotMessenger(userRepository));
         messengers.add(new DictionaryBotMessenger(userRepository, dictionaryRepository));
+        messengers.add(new TextBotMessenger(userRepository, dictionaryRepository));
 
 
     }

@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 
 @Component
 @Slf4j
-public class StartBotMessenger extends  BotMessenger{
+public class StartBotMessenger extends  BotMessenger implements IBotMessenger{
 //    public StartBotMessenger(Update update) {
 //        super(update);
 //    }
@@ -25,7 +25,9 @@ public class StartBotMessenger extends  BotMessenger{
 
     @Override
     public boolean isAllow() {
-        return update.getMessage().getText().equals("/start");
+//        return update.getMessage().getText().equals("/start");
+        return this.getUpdate().getMessage().getText().equals("/start");
+
     }
 
     @Override
@@ -41,7 +43,7 @@ public class StartBotMessenger extends  BotMessenger{
     @Override
     public SendMessage execute() {
 
-        final long chatId =  update.getMessage().getChatId();
+        final long chatId =  this.getUpdate().getMessage().getChatId();
 
 //        if(userRepository.findById(chatId).isEmpty()){
 //            User user = new User();
@@ -54,7 +56,7 @@ public class StartBotMessenger extends  BotMessenger{
 //        }
 
 
-        final String text =  String.format("Hi, %s! You are registered!", update.getMessage().getChat().getFirstName());
+        final String text =  String.format("Hi, %s! You are registered!", this.getUpdate().getMessage().getChat().getFirstName());
 
 
 
